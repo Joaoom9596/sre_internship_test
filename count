@@ -1,0 +1,28 @@
+#!/bin/awk -f
+BEGIN { n = 0; last_path = "" }
+
+{
+	path = $2; status = $3; count = $1
+	
+	if(path != last_path) { n++ }
+
+	pathList[n] = path
+
+	if(status == "success") { successList[path] += count }
+	if(status == "error") 	{ errorList[path] += count }
+}
+
+END {
+	print "["
+
+	for(i = 1; i <= n; i++)
+	{
+		print "\t{"
+		print "\t\t\"path\":", "\"" pathList[i] "\"," 
+		print "\t\t\"errorCount\":", int(errorList[pathList[i]]) ","
+		print "\t\t\"successCount\":", int(successList[pathList[i]]) "," 
+		print "\t},"
+	}
+
+	print "]"
+}

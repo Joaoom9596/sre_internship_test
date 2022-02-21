@@ -1,0 +1,4 @@
+#!/bin/sh
+
+grep '^{"env"' | tr ',{}' '\n\n ' | grep '"path"\|"statusCode"' | paste - - |\
+sed 's/"path"://;s/"statusCode"://;s/[23]..$/success/;s/[45]..$/error/' | tr -d '"' | sort | uniq -c 
